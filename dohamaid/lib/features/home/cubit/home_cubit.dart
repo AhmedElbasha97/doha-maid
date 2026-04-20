@@ -1,0 +1,142 @@
+import 'package:dohamaid/core/services/home_services.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/data/datasources/api_service.dart';
+import '../data/model/home_model.dart';
+import '../presentation/home_screen.dart';
+import 'home_state.dart';
+
+
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit() : super(HomeInitial());
+  late AnimationController controller;
+
+  late List<Animation<double>> fadeAnimations;
+  late List<Animation<Offset>> slideAnimations;
+
+   List<String> titles = [];
+
+  final List<String> icons = [
+    "assets/icons/1.png",
+    "assets/icons/2.png",
+    "assets/icons/2.png",
+    "assets/icons/5.png",
+    "assets/icons/6.png",
+    "assets/icons/1.png",
+    "assets/icons/2.png",
+    "assets/icons/3.png",
+    "assets/icons/4.png",
+    "assets/icons/5.png",
+    "assets/icons/6.png",
+    "assets/icons/7.png",
+
+
+  ];
+  List<Datum> homeData = [];
+
+  void resetState(  BuildContext context) {
+   _navigateIfNotOpen(context, screen: const HomeScreen(), routeName: "HomeScreen");
+  }
+  bool isScreenAlreadyOpen(BuildContext context, Type screenType) {
+    bool isOpen = false;
+
+    Navigator.popUntil(context, (route) {
+      if (route.settings.name == "$screenType") {
+        isOpen = true;
+      }
+      return true;
+    });
+
+    return isOpen;
+  }
+  void _navigateIfNotOpen(
+      BuildContext context, {
+        required Widget screen,
+        required String routeName,
+      }) {
+    if (isScreenAlreadyOpen(context, screen.runtimeType)) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => screen,
+          settings: RouteSettings(name: routeName),
+        ),
+      );
+    }
+  }
+  /// -------------------------
+  /// LOAD DATA (Fake Example)
+  /// -------------------------
+  Future<void> loadHomeData(AnimationController ctrl) async {
+   controller = ctrl;
+   homeData.clear();
+   titles =  [
+     "company_home".tr(),
+     "company_home1".tr(),
+     "company_home2".tr(),
+     "company_home3".tr(),
+     "company_home4".tr(),
+   ];
+    try {
+      emit(HomeLoading());
+
+     HomeModel? data = await HomeServices(ApiService()).getAllHomeTaps();
+     if(data?.data == []){
+       homeData.clear();
+       homeData.addAll([Datum(id: 1,name: titles[0],active: 1,url: "nothing"),
+         Datum(id: 2,name: titles[1],active: 1,url: "nothing"),
+         Datum(id: 3,name: titles[2],active: 1,url: "nothing"),
+         Datum(id: 4,name: titles[3],active: 1,url: "nothing"),
+         Datum(id: 5,name: titles[4],active: 1,url: "nothing")]);
+     }else{
+       homeData.clear();
+       homeData.addAll([Datum(id: 1,name: titles[0],active: 1,url: "nothing"),
+         Datum(id: 2,name: titles[1],active: 1,url: "nothing"),
+         Datum(id: 3,name: titles[2],active: 1,url: "nothing"),
+         Datum(id: 4,name: titles[3],active: 1,url: "nothing"),
+         Datum(id: 5,name: titles[4],active: 1,url: "nothing")]);
+       for(Datum? homeTap in (data!.data!) ) {
+         if (homeTap?.active == 1) {
+           homeData.add(homeTap!);
+         }
+       }
+     }
+      _createAnimations(homeData.length);
+      emit(HomeLoaded(homeData));
+      ctrl.forward();
+    } catch (e) {
+      emit(HomeError("Failed to load data"));
+    }
+  }
+  void _createAnimations(int count) {
+    fadeAnimations = List.generate(
+      count,
+          (i) => Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(
+          parent: controller,
+          curve: Interval(i * 0.1, 1, curve: Curves.easeOut),
+        ),
+      ),
+    );
+
+    slideAnimations = List.generate(
+      count,
+          (i) => Tween<Offset>(
+        begin: const Offset(0, .3),
+        end: Offset.zero,
+      ).animate(
+        CurvedAnimation(
+          parent: controller,
+          curve: Interval(i * 0.1, 1, curve: Curves.easeOut),
+        ),
+      ),
+    );
+  }
+  @override
+  Future<void> close() {
+    controller.dispose();
+    return super.close();
+  }
+}

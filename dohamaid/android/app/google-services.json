@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "595191208584",
+    "project_id": "doha-maid",
+    "storage_bucket": "doha-maid.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595191208584:android:f3d74ac5b8e7c4c527dd3d",
+        "android_client_info": {
+          "package_name": "com.sync.dohamaid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASv_U3Swpr-00b6GTKna6YldUsMoBV0Bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

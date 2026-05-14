@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/presentation/cubit/localization_cubit.dart';
 import '../worker_companies/data/worker_companies_model.dart';
 import 'package:dohamaid/core/config/app_color.dart';
 
@@ -20,7 +22,7 @@ class CompaniesTapWidget extends StatelessWidget {
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color:  AppColor.secondaryColor, width: 2),
+        border: Border.all(color:  AppColor.companyBorderColors, width: 2),
       ),
       child: Row(
         children: [
@@ -110,7 +112,8 @@ class CompaniesTapWidget extends StatelessWidget {
               children: [
                 Text(
                   company?.name??"",
-                  style: const TextStyle(
+                  style:  TextStyle(
+                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                     fontSize: 18,
                     color: AppColor.secondaryColor,
                     fontWeight: FontWeight.bold,
@@ -119,7 +122,9 @@ class CompaniesTapWidget extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   "${company?.workers} ${"worker_suffix".tr()}",
-                  style: const TextStyle(
+
+                  style:  TextStyle(
+                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                     fontSize: 14,
                     color: AppColor.black87,
                   ),
@@ -139,12 +144,13 @@ class CompaniesTapWidget extends StatelessWidget {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color:  AppColor.secondaryColor,
+                            color:  AppColor.companyBorderColors,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child:  Text(
                             "more_button".tr(),
-                            style: const TextStyle(
+                            style:  TextStyle(
+                              fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                               color: AppColor.white,
                               fontSize: 14,
                             ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../loader.dart';
 import '../../../widget/no_data_widget.dart';
 import '../../drawer/cubit/drawer_cubit.dart';
@@ -146,7 +147,8 @@ class _BookingCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     '${'booking_id'.tr()} #${item.id}',
-                    style: const TextStyle(
+                    style:  TextStyle(
+                      fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                       fontWeight: FontWeight.w800,
                       fontSize: 19,
                     ),
@@ -162,7 +164,8 @@ class _BookingCard extends StatelessWidget {
                     ' - ${"arrivalTime".tr()}: ${item.arrivalTime}',
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style:  TextStyle(
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   color: AppColor.black54,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -172,7 +175,8 @@ class _BookingCard extends StatelessWidget {
                 item.notes,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style:  TextStyle(
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   color: AppColor.black54,
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
@@ -183,7 +187,8 @@ class _BookingCard extends StatelessWidget {
                 item.address,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style:  TextStyle(
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   color: AppColor.black54,
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -205,7 +210,8 @@ class _BookingCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 '${'status'.tr()}: ${item.status} • ${item.date}',
-                style: const TextStyle(
+                style:  TextStyle(
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   color: AppColor.black45,
                   fontWeight: FontWeight.w500,
                 ),

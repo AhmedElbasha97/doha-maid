@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/data/datasources/api_service.dart';
+import '../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../core/services/auth_services.dart';
 import '../../drawer/cubit/drawer_cubit.dart';
 import '../../drawer/presentation/drawer_screen.dart';
@@ -92,15 +93,15 @@ class ProfileScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          _animatedHeader(),
+          _animatedHeader(context),
           const SizedBox(height: 24),
 
 
           _glassCard(children: [
-            _infoRow(Icons.person, "name".tr(), profile?.name ?? ""),
-            _infoRow(Icons.email_outlined, "email".tr(), profile?.email ?? ""),
-            _infoRow(Icons.phone, "phone".tr(), profile?.mobile ?? "not_available".tr()),
-            _infoRow(Icons.calendar_today, "created_at".tr(), profile?.createdAt ?? ""),
+            _infoRow(Icons.person, "name".tr(), profile?.name ?? "",context),
+            _infoRow(Icons.email_outlined, "email".tr(), profile?.email ?? "",context),
+            _infoRow(Icons.phone, "phone".tr(), profile?.mobile ?? "not_available".tr(),context),
+            _infoRow(Icons.calendar_today, "created_at".tr(), profile?.createdAt ?? "",context),
           ]),
           const SizedBox(height: 30),
 
@@ -146,7 +147,7 @@ Widget _glassCard({required List<Widget> children}) {
 
 
 // ========== Info Row ==========
-Widget _infoRow(IconData icon, String title, String value) {
+Widget _infoRow(IconData icon, String title, String value,BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10),
     child: Row(
@@ -165,8 +166,13 @@ Widget _infoRow(IconData icon, String title, String value) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontSize: 13, color: AppColor.black54)),
-              Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              Text(title, style:  TextStyle(
+                fontSize: 13,
+                color: AppColor.black54,
+                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+              )),
+              Text(value, style:  TextStyle(fontSize: 16, fontWeight: FontWeight.w600,
+                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",)),
             ],
           ),
         ),
@@ -201,7 +207,7 @@ Widget _logoutButton(BuildContext context) {
         Text(
             "logout".tr()
           ,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.white),
+          style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.white,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
         ),
       ],
     ),
@@ -234,14 +240,14 @@ Widget _deleteButton(BuildContext context) {
         Text(
             "delete_title".tr()
           ,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.white),
+          style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.white,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
         ),
       ],
     ),
   );
 }
 // ========== Animated Header with Gradient ==========
-Widget _animatedHeader() {
+Widget _animatedHeader(BuildContext context) {
   return TweenAnimationBuilder(
     tween: Tween<double>(begin: 0, end: 1),
     duration: const Duration(milliseconds: 900),
@@ -274,8 +280,9 @@ Widget _animatedHeader() {
         child: Text(
             "profile_title".tr()
           ,
-          style: const TextStyle(
+          style:  TextStyle(
             color: AppColor.white,
+            fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
             fontSize: 24,
             fontWeight: FontWeight.w700,
           ),

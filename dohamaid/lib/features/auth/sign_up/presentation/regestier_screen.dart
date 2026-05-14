@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../../core/utils/validation.dart';
 import '../../../../loader.dart';
 
@@ -73,7 +74,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             /// TITLE
                             Text(
                               "register_title".tr(),
-                              style: const TextStyle(
+                              style:  TextStyle(
+                                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
                                 color: AppColor.mainColor,
@@ -177,7 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 "choose",
                                                 style: TextStyle(
                                                   fontSize: 15.0,
-
+                                                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                                   color: AppColor.mainColor,
                                                 ),
                                               ),
@@ -275,8 +277,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "readAppPolicyAndTerms".tr(),  style:  const TextStyle(
-
+                                              "readAppPolicyAndTerms".tr(),  style:   TextStyle(
+                                                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                                 color: AppColor.black,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 15),),
@@ -294,16 +296,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                   },
                                                   child: Text(
                                                     "privacyPolicy".tr(),
-                                                    style:  const TextStyle(
-
+                                                    style:   TextStyle(
+                                                        fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                                         color: AppColor.mainColor,
                                                         fontWeight: FontWeight.w600,
                                                         fontSize: 15),
                                                   ),
                                                 ),
                                                 Text(
-                                                  "and".tr(),  style:  const TextStyle(
-
+                                                  "and".tr(),  style:   TextStyle(
+                                                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                                     color: AppColor.black,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 15),),
@@ -322,8 +324,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               },
                                               child: Text(
                                                 "termsAndCondition".tr(),
-                                                style:  const TextStyle(
-
+                                                style:   TextStyle(
+                                                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                                     color: AppColor.mainColor,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 15),
@@ -353,7 +355,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ),
                                       child:  Text(
                                         "register_title".tr(),
-                                        style: const TextStyle(fontSize: 18, color: AppColor.white),
+                                        style:  TextStyle(fontSize: 18, color: AppColor.white,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                                       ),
                                     ),
                                   ],
@@ -365,7 +367,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text("have_account_prompt".tr(),
-                                  style: const TextStyle(
+                                  style: TextStyle(
+                                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                     fontSize: 16,
                                   ),
                                 ),
@@ -379,7 +382,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                                   child:  Text(
                                     "login_title".tr(),
-                                    style: const TextStyle(
+                                    style:  TextStyle(
+                                      fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                       color: AppColor.mainColor,
                                       fontSize: 16,
                                     ),

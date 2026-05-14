@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../drawer/cubit/drawer_cubit.dart';
 import '../../../drawer/presentation/drawer_screen.dart';
 import 'package:dohamaid/core/config/app_color.dart';
@@ -60,8 +61,9 @@ class CancellationPolicyScreen extends StatelessWidget {
           children: [
             Text(
               "cancellationPolicy".tr(),
-              style: const TextStyle(
+              style:  TextStyle(
                 fontSize: 16,
+                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                 fontWeight: FontWeight.w600,
                 color: AppColor.secondaryColor,
               ),
@@ -69,7 +71,8 @@ class CancellationPolicyScreen extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               "cancellation".tr(),
-              style: const TextStyle(
+              style:  TextStyle(
+                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: AppColor.textPrimaryDark,
@@ -115,7 +118,7 @@ class _Bullet extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(fontSize: 15, color: AppColor.textPrimaryDark, height: 1.5),
+            style:  TextStyle(fontSize: 15, color: AppColor.textPrimaryDark, height: 1.5,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
           ),
         ),
       ],

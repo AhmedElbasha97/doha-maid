@@ -65,4 +65,8 @@ class LocalizationCubit extends Cubit<Locale> {
       context.read<WelcomeCubit>().resetState(context);
     } catch (_) {}
   }
+  bool  isArabic ()  {
+    final code = storage.getSavedLocaleCode();
+    return (code == 'ar'??true);
+  }
 }

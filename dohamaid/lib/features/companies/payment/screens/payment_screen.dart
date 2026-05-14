@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../webview/web_view.dart';
 import '../../booking_screens/data/booking_category_model.dart';
@@ -114,8 +115,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     children: [
                       Text(
                         "bookingInfo".tr(),
-                        style: const TextStyle(
+                        style:  TextStyle(
                           fontSize: 18,
+                          fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                           fontWeight: FontWeight.bold,
                           color: AppColor.textPrimaryDark,
                         ),
@@ -132,7 +134,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       const SizedBox(height: 24),
                       Text(
                         "address".tr(),
-                        style: const TextStyle(
+                        style:  TextStyle(
+                          fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                           fontSize: 14,
                           color: AppColor.textSecondaryDark,
                           fontWeight: FontWeight.w500,
@@ -144,7 +147,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             widget.address!.displayAddress.isNotEmpty
                             ? widget.address!.displayAddress
                             : "sampleAddress".tr(),
-                        style: const TextStyle(
+                        style:  TextStyle(
+                          fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                           fontSize: 16,
                           color: AppColor.textPrimaryDark,
                           fontWeight: FontWeight.w500,
@@ -155,7 +159,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         children: [
                           Text(
                             "paymentMethod".tr(),
-                            style: const TextStyle(
+                            style:  TextStyle(
+                              fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: AppColor.textPrimaryDark,
@@ -184,7 +189,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 children: [
                                   Text(
                                     "errorKey".tr(),
-                                    style: const TextStyle(fontSize: 20,
+                                    style:  TextStyle(fontSize: 20,
+                                        fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                         fontWeight: FontWeight.bold),
                                     textAlign: TextAlign.center,
                                   ),
@@ -194,7 +200,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   Text(
                                     "payment_alert".tr(),
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 15),
+
+                                    style:  TextStyle(fontSize: 15,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                                   ),
 
 
@@ -235,7 +242,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 const SizedBox(width: 14),
                                 Text(
                                   "onlinePayment".tr(),
-                                  style: const TextStyle(
+                                  style:  TextStyle(
+                                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                     color: AppColor.textPrimaryDark,
@@ -260,7 +268,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       const SizedBox(height: 24),
                       Text(
                         "paymentSummary".tr(),
-                        style: const TextStyle(
+                        style:  TextStyle(
+                          fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: AppColor.textPrimaryDark,
@@ -298,7 +307,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   ),
                               child: Text.rich(
                                 TextSpan(
-                                  style: const TextStyle(
+                                  style:  TextStyle(
+                                      fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                       color: AppColor.textPrimaryDark, fontSize: 14),
                                   children: [
                                     TextSpan(text: "cancellationPolicyAgree"
@@ -306,7 +316,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         .split('100%')[0]),
                                     TextSpan(
                                       text: ' ${"cancellationPolicyLink".tr()}',
-                                      style: const TextStyle(
+                                      style:  TextStyle(
+                                        fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                         decoration: TextDecoration.underline,
                                         color: AppColor.secondaryColor,
                                         fontWeight: FontWeight.w600,
@@ -358,7 +369,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             );
                           },
                           child: Text("requestService".tr(),
-                            style: const TextStyle(color: AppColor.white),),
+                            style:  TextStyle(color: AppColor.white,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),),
                         ),
                       ),
                     ],
@@ -387,7 +398,7 @@ class _InfoRow extends StatelessWidget {
       children: [
         Expanded(child: Text(value, style: const TextStyle(color: AppColor.textPrimaryDark, fontSize: 15))),
         const SizedBox(width: 12),
-        Text(label, style: const TextStyle(color: AppColor.textSecondaryDark, fontSize: 15)),
+        Text(label, style:  TextStyle(color: AppColor.textSecondaryDark, fontSize: 15,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",)),
       ],
     );
   }
@@ -461,7 +472,8 @@ class _PaymentOption extends StatelessWidget {
               const SizedBox(width: 14),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: AppColor.textPrimaryDark,
@@ -486,8 +498,8 @@ class _SummaryRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(value, style: const TextStyle(color: AppColor.textPrimaryDark, fontWeight: FontWeight.w600)),
-        Text(label, style: const TextStyle(color: AppColor.textSecondaryDark)),
+        Text(value, style:  TextStyle(color: AppColor.textPrimaryDark, fontWeight: FontWeight.w600,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",)),
+        Text(label, style:  TextStyle(color: AppColor.textSecondaryDark,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",)),
       ],
     );
   }

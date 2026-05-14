@@ -2,6 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:dohamaid/core/config/app_color.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'core/presentation/cubit/localization_cubit.dart';
 
 
 
@@ -56,7 +59,8 @@ final double width;
                  const SizedBox(height:10),
                   Text(
                    "loading".tr(),
-                  style:  const TextStyle(
+                  style:   TextStyle(
+                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                     color: AppColor.white,
                     fontWeight: FontWeight.w800,
                     fontSize: 15,

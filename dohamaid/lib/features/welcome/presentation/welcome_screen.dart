@@ -85,8 +85,8 @@ class WelcomeScreen extends StatelessWidget {
                                     const SizedBox(width: 10,),
                                   Text("skipToHomeBTN".tr(),
                                       textAlign: TextAlign.center,
-                                      style:  const TextStyle(
-
+                                      style:   TextStyle(
+                                      fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                color: AppColor.mainColor,
 
                                           fontWeight: FontWeight.w800,
@@ -112,7 +112,8 @@ class WelcomeScreen extends StatelessWidget {
 
                                     Text("languageWelcomeBTN".tr(),
                                       textAlign: TextAlign.center,
-                                      style:  const TextStyle(
+                                      style:   TextStyle(
+                                          fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
 
                                           color: AppColor.mainColor,
                                           fontWeight: FontWeight.w800,

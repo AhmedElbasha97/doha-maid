@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:dohamaid/core/config/app_color.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/presentation/cubit/localization_cubit.dart';
 
 class HomeTapWidget extends StatelessWidget {
   const HomeTapWidget({super.key, required this.title, required this.icon, required this.onTap});
@@ -39,8 +42,9 @@ class HomeTapWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
+                style:  TextStyle(
                   color: AppColor.white,
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),

@@ -4,6 +4,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../core/presentation/cubit/theme_cubit.dart';
 import '../cubit/drawer_cubit.dart';
 import '../data/drawer_model.dart';
@@ -88,7 +89,7 @@ class CustomDrawer extends StatelessWidget {
                                         height: 64,
                                       ),
                                       const SizedBox(height: 8),
-                                      const Text("Since 2014 منذ", style: TextStyle(color: AppColor.black54)),
+                                       Text("Since 2014 منذ", style: TextStyle(color: AppColor.black54,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",)),
                                       const SizedBox(height: 12),
                                     ],
                                   ),
@@ -154,7 +155,8 @@ class CustomDrawer extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       it.title,
-                      style: const TextStyle(
+                      style:  TextStyle(
+                        fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                         color: AppColor.mainColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -211,7 +213,7 @@ class CustomDrawer extends StatelessWidget {
                         child: Text(
                           c.title,
                           textAlign: TextAlign.right,
-                          style: const TextStyle(color: AppColor.black87, fontSize: 14),
+                          style:  TextStyle(color: AppColor.black87, fontSize: 14,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                         ),
                       ),
                     ],
@@ -247,8 +249,9 @@ Widget _themeSwitcher(BuildContext context) {
             Expanded(
               child: Text(
                 isDark ? 'dark_mode'.tr() : 'light_mode'.tr(),
-                style: const TextStyle(
+                style:  TextStyle(
                   fontSize: 15,
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   fontWeight: FontWeight.w600,
                   color: AppColor.mainColor,
                 ),

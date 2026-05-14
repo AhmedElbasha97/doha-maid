@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/data/datasources/storage_local_data_source.dart';
+import '../../../core/presentation/cubit/localization_cubit.dart';
 import '../../home/presentation/home_screen.dart';
 import '../../welcome/presentation/welcome_screen.dart';
 import '../cubit/splash_cubit.dart';
@@ -68,8 +69,10 @@ class SplashScreen extends StatelessWidget {
               "splash_subtitle".tr()
                           ,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColor.mainColor,
+                            fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0.8,

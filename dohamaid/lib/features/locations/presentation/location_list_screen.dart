@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../loader.dart';
 import '../../../widget/no_data_widget.dart';
 import '../../drawer/cubit/drawer_cubit.dart';
@@ -72,6 +73,7 @@ class LocationListScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     child: Text(
                       state.message,
+
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -146,8 +148,9 @@ class _LocationCard extends StatelessWidget {
                 item.address??"",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style:  TextStyle(
                   color: AppColor.black54,
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
@@ -159,8 +162,9 @@ class _LocationCard extends StatelessWidget {
                     ' - ${"building_no".tr()}: ${item.buildingNo}',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
+                style:  TextStyle(
                   color: AppColor.black54,
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),

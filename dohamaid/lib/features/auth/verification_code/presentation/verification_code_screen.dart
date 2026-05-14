@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/data/datasources/storage_local_data_source.dart';
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../../core/utils/responsive.dart';
 import '../cubit/verification_code_cubit.dart';
 import '../cubit/verification_code_state.dart';
@@ -47,7 +48,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                     const SizedBox(height: 20),
                     Text(
                       "verification_code_title".tr(),
-                      style: const TextStyle(
+                      style:  TextStyle(
+                        fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: AppColor.mainColor,
@@ -75,9 +77,9 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               Text(
                                 "otp_title".tr() + cubit.phoneNumber,
                                 textAlign: TextAlign.right,
-                                style: const TextStyle(
+                                style:  TextStyle(
                                   fontSize: 14,
-
+                                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                   fontWeight: FontWeight.bold,
                                   color: AppColor.mainColor,
                                 ),
@@ -150,7 +152,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                             ),
                             child: Text(
                               "verification_confirm_button".tr(),
-                              style: const TextStyle(
+                              style:  TextStyle(
+                                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                 fontSize: 18,
                                 color: AppColor.white,
                               ),
@@ -160,7 +163,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                           Text(
                             "${"resend_after".tr()} ${cubit
                                 .remainingSeconds} ${"seconds".tr()}",
-                            style: const TextStyle(
+                            style:  TextStyle(
+                              fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                               fontSize: 16,
                               color: AppColor.textMuted,
                             ),
@@ -199,7 +203,8 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                           children: [
                             Text(
                               "resend_code_button".tr(),
-                              style: const TextStyle(
+                              style:  TextStyle(
+                                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                 fontSize: 18,
                                 color: AppColor.white,
                               ),

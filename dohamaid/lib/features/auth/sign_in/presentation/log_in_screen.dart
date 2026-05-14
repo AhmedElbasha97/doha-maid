@@ -3,6 +3,7 @@
 import  'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../../core/utils/validation.dart';
 import '../../sign_up/presentation/regestier_screen.dart';
 import '../cubit/log_in_cubit.dart';
@@ -29,7 +30,7 @@ class LoginScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         "login_success".tr(),
-                        style: const TextStyle(color: AppColor.white, fontSize: 16),
+                        style:  TextStyle(color: AppColor.white, fontSize: 16,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                       ),
                     ),
                   ],
@@ -53,7 +54,7 @@ class LoginScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         state.message,
-                        style: const TextStyle(color: AppColor.white, fontSize: 16),
+                        style:  TextStyle(color: AppColor.white, fontSize: 16,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                       ),
                     ),
                   ],
@@ -93,7 +94,8 @@ class LoginScreen extends StatelessWidget {
                     /// TITLE
                      Text(
                       "login_button".tr(),
-                      style: const TextStyle(
+                      style:  TextStyle(  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: AppColor.mainColor,
@@ -199,7 +201,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                               child:  Text(
                                 "login_button".tr(),
-                                style: const TextStyle(fontSize: 18,color: AppColor.white),
+                                style:  TextStyle(fontSize: 18,color: AppColor.white,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                               ),
                             ),
                           ],
@@ -213,7 +215,8 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Text(
                         "no_account_prompt".tr(),
-                        style: const TextStyle(
+                        style:  TextStyle(
+                          fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                           fontSize: 16,
                         ),
                       ),
@@ -226,7 +229,8 @@ class LoginScreen extends StatelessWidget {
                           ),
                           child:  Text(
                             "create_account_button".tr(),
-                            style: const TextStyle(
+                            style:  TextStyle(
+                              fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                               color: AppColor.mainColor,
                               fontSize: 16,
                             ),

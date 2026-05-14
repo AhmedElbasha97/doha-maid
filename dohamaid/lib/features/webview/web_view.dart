@@ -4,10 +4,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dohamaid/core/config/app_color.dart';
+
+import '../../core/presentation/cubit/localization_cubit.dart';
+import '../drawer/cubit/drawer_cubit.dart';
+import '../drawer/presentation/drawer_screen.dart';
 
 
 class WebViewContainer extends StatefulWidget {
@@ -25,6 +30,7 @@ class _WebViewContainerState extends State<WebViewContainer> {
   @override
   void initState() {
     super.initState();
+    print(widget.url);
     _requestPermissions();
   }
 
@@ -50,7 +56,43 @@ class _WebViewContainerState extends State<WebViewContainer> {
       ),
       child: Scaffold(
         backgroundColor:  AppColor.mainColor,
+        appBar: AppBar(
+          backgroundColor:  AppColor.appBarBackground,
+          elevation: 3,
+          title: Image.asset(
+            "assets/logo with out background.png",
+            scale: 4.5,
+          ),
+          centerTitle: true,
+          leading:IconButton(
+              icon: const Icon(Icons.menu, color:  AppColor.mainColor),
+              onPressed: (){
+                // inside any widget with context:
+                showGeneralDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  barrierLabel: 'drawer',
+                  pageBuilder: (ctx, anim1, anim2) {
+                    return BlocProvider(
+                      create: (_) => DrawerCubit()..load(),
+                      child: const CustomDrawer(
 
+                      ),
+                    );
+                  },
+                  transitionBuilder: (ctx, anim, secAnim, child) {
+                    return FadeTransition(
+                      opacity: anim,
+                      child: child,
+                    );
+                  },
+                );
+
+              }        ),
+          actions:[IconButton(onPressed: (){
+            Navigator.maybePop(context);
+          }, icon: const Icon(Icons.arrow_forward_ios, color:  AppColor.mainColor)) ],
+        ),
         body: SafeArea(
           child: WillPopScope(
             onWillPop: () async {
@@ -165,12 +207,13 @@ class _WebViewContainerState extends State<WebViewContainer> {
                                   .fadeIn(duration: 1200.ms, curve: Curves.easeOutQuad)
                                   .slide(),
                               const SizedBox(height:10),
-                              const Text(
+                               Text(
                                 "جار التحميل...",
                                 style:  TextStyle(
                                   color: AppColor.white,
                                   fontWeight: FontWeight.w800,
                                   fontSize: 15,
+                                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
 
                                   height: 1,
                                   letterSpacing: -1,

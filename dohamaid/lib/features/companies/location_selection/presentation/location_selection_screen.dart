@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../drawer/cubit/drawer_cubit.dart';
 import '../../../drawer/presentation/drawer_screen.dart';
 import '../../booking_screens/data/booking_category_model.dart';
@@ -145,8 +146,9 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                           const SizedBox(height: 20),
                           Text(
                             "saved_locations".tr(),
-                            style: const TextStyle(
+                            style:  TextStyle(
                               fontSize: 14,
+                              fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                               color: AppColor.textSecondaryDark,
                               fontWeight: FontWeight.w500,
                             ),
@@ -182,7 +184,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                               onPressed: () => _onNext(state),
                               child: Text(
                                 "next".tr(),
-                                style: const TextStyle(color: AppColor.white),
+                                style:  TextStyle(color: AppColor.white,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                               ),
                             ),
                           ),
@@ -478,9 +480,10 @@ class _SuggestionsList extends StatelessWidget {
                   ),
                   title: Text(
                     s.description,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 14,
                       color: AppColor.textPrimaryDark,
+                      fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                     ),
                   ),
                     dense: true,
@@ -563,7 +566,7 @@ class _SearchBarState extends State<_SearchBar> {
               onSubmitted: (_) => widget.onSearch(),
               decoration: InputDecoration(
                 hintText: "search_placeholder".tr(),
-                hintStyle: const TextStyle(color: AppColor.textSecondaryDark, fontSize: 15),
+                hintStyle:  TextStyle(color: AppColor.textSecondaryDark, fontSize: 15,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -634,7 +637,8 @@ class _UseCurrentLocationButton extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 "use_current_location".tr(),
-                style: const TextStyle(
+                style:  TextStyle(
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   fontSize: 16,
                   color: AppColor.textPrimaryDark,
                   fontWeight: FontWeight.w500,
@@ -765,7 +769,8 @@ class _AddressTextFieldState extends State<_AddressTextField> {
       children: [
         Text(
           widget.label,
-          style: const TextStyle(
+          style:  TextStyle(
+            fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
             fontSize: 14,
             color: AppColor.textSecondaryDark,
             fontWeight: FontWeight.w500,
@@ -786,7 +791,7 @@ class _AddressTextFieldState extends State<_AddressTextField> {
           },
           decoration: InputDecoration(
             hintText: widget.hint ?? widget.label,
-            hintStyle: const TextStyle(color: AppColor.gray400),
+            hintStyle:  TextStyle(color: AppColor.gray400,  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -841,7 +846,8 @@ class _SavedLocationChip extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 label,
-                style: const TextStyle(
+                style:  TextStyle(  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                   fontSize: 16,
                   color: AppColor.textPrimaryDark,
                   fontWeight: FontWeight.w500,

@@ -289,7 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
-                                                        builder: (_) =>  const WebViewContainer( "https://dohamaid.com/qa/ar/page/3/mobile"),
+                                                        builder: (_) =>  const WebViewContainer( "https://dohamaid.com/ar/about/3"),
                                                         settings: const RouteSettings(name: "webView"),
                                                       ),
                                                     );
@@ -317,7 +317,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (_) =>  const WebViewContainer( "https://dohamaid.com/qa/ar/page/10/mobile"),
+                                                    builder: (_) =>  const WebViewContainer( "https://dohamaid.com/ar/about/10"),
                                                     settings: const RouteSettings(name: "webView"),
                                                   ),
                                                 );

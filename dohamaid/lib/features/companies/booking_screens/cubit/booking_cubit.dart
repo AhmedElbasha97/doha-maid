@@ -13,8 +13,11 @@ import 'booking_state.dart';
 
 class BookingCubit extends Cubit<BookingStates> with ChangeNotifier {
   BookingCubit() : super(BookingInitialState());
+  final FocusNode textFocusNode = FocusNode();
 
-
+  void unFocusText() {
+    if(textFocusNode.hasFocus) textFocusNode.unfocus();
+  }
   BookingCategoryModel? bookingTimes;
   BookingCategoryModel? bookingHours;
   BookingCategoryModel? bookingServices;

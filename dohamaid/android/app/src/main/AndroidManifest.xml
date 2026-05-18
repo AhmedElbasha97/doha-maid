@@ -29,7 +29,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:usesCleartextTraffic="false"> <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="YOUR_PRODUCTION_API_KEY_HERE" />
+        android:value="AIzaSyBIZFMbsv5bcvsOTlUtZk3CvwxSH1lgSgM" />
 
         <activity
             android:name=".MainActivity"

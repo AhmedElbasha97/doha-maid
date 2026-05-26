@@ -1,5 +1,6 @@
 import 'package:dohamaid/core/utils/api_constant.dart';
 import 'package:dohamaid/features/auth/data/auth_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../features/auth/data/data_model.dart';
 import '../../features/auth/data/otp_model.dart';
@@ -13,9 +14,14 @@ class AuthServices {
   AuthServices(this.api);
 
   Future<AuthModel?> loggingIn(String? email, String? password) async {
-    final resp = await api.post(ApiConstant.loginLink,data: {
-      "email": email,
-      "password": password,
+    var resp;
+    await FirebaseMessaging.instance.getToken().then((token) async {
+
+      resp = await api.post(ApiConstant.loginLink,data: {
+        "email": email,
+        "password": password,
+        "device_token":token
+      });
     });
     final data = resp.data;
     if (data == null) return null;

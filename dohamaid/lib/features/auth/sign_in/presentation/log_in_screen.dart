@@ -217,7 +217,7 @@ class LoginScreen extends StatelessWidget {
                         "no_account_prompt".tr(),
                         style:  TextStyle(
                           fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
-                          fontSize: 16,
+                          fontSize: 12,
                         ),
                       ),
                         TextButton(
@@ -232,7 +232,7 @@ class LoginScreen extends StatelessWidget {
                             style:  TextStyle(
                               fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                               color: AppColor.mainColor,
-                              fontSize: 16,
+                              fontSize: 12,
                             ),
                           ),
                         ),

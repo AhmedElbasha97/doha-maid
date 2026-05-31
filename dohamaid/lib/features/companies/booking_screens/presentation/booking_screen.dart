@@ -456,7 +456,7 @@ class _BottomBar extends StatelessWidget {
                     ),
                   ),
                   BlocBuilder<BookingCubit, BookingStates>(
-                    buildWhen: (a, b) => cubit.totalPrice != cubit.totalPrice,
+                    buildWhen: (_, __) => true, // BUG FIX 11: was `cubit.totalPrice != cubit.totalPrice` (always false — same ref). Price display never updated.
                     builder: (context, state) {
                       return Text(
                         '${cubit.totalPrice} ${"currencyQAR".tr()}',

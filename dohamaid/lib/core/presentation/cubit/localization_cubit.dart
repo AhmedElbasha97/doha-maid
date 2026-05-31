@@ -20,10 +20,13 @@ class LocalizationCubit extends Cubit<Locale> {
 
   LocalizationCubit(this.storage) : super(defaultLocale);
 
+  // BUG FIX 3: getSavedLocaleCode() returns String, not Future<String>.
+  // Removed incorrect `await` — it compiled only because Dart allows
+  // `await` on non-Futures (returns the value directly), but it signals
+  // a misunderstanding and can break if the signature ever changes.
   Future<void> loadLocale(BuildContext context) async {
-    final code = await storage.getSavedLocaleCode();
-    final newLocale = (code != null && code.isNotEmpty) ? Locale(code) : defaultLocale;
-
+    final code = storage.getSavedLocaleCode();
+    final newLocale = code.isNotEmpty ? Locale(code) : defaultLocale;
     emit(newLocale);
     await context.setLocale(newLocale);
   }
@@ -31,42 +34,31 @@ class LocalizationCubit extends Cubit<Locale> {
   Future<void> toggleLanguage(BuildContext context) async {
     final newCode = state.languageCode == 'en' ? 'ar' : 'en';
     final newLocale = Locale(newCode);
-
     await storage.saveLocaleCode(newCode);
     await context.setLocale(newLocale);
-
     _notifyCubitsToRefresh(context);
     emit(newLocale);
   }
 
   void _notifyCubitsToRefresh(BuildContext context) {
-    try {
-      context.read<HomeCubit>().resetState(context);
-    } catch (_) {}
-    try {
-      context.read<WorkerCompaniesCubit>().resetState(context);
-    } catch (_) {}
-    try {
-      context.read<NursingCompaniesCubit>().resetState(context);
-    } catch (_) {}
-    try {
-      context.read<CleaningCompaniesCubit>().resetState(context);
-    } catch (_) {}
-    try {
-      context.read<AntiBugCompaniesCubit>().resetState(context);
-    } catch (_) {}
-    try {
-      context.read<WorkerSuppliersCubit>().resetState(context);
-    } catch (_) {}
-    try {
-      context.read<CompanyDetailsCubit>().resetState(context);
-    } catch (_) {}
-    try {
-      context.read<WelcomeCubit>().resetState(context);
-    } catch (_) {}
+    try { context.read<HomeCubit>().resetState(context); } catch (_) {}
+    try { context.read<WorkerCompaniesCubit>().resetState(context); } catch (_) {}
+    try { context.read<NursingCompaniesCubit>().resetState(context); } catch (_) {}
+    try { context.read<CleaningCompaniesCubit>().resetState(context); } catch (_) {}
+    try { context.read<AntiBugCompaniesCubit>().resetState(context); } catch (_) {}
+    try { context.read<WorkerSuppliersCubit>().resetState(context); } catch (_) {}
+    try { context.read<CompanyDetailsCubit>().resetState(context); } catch (_) {}
+    // BUG FIX 4: WelcomeCubit.resetState no longer takes BuildContext
+    try { context.read<WelcomeCubit>().resetState(); } catch (_) {}
   }
-  bool  isArabic ()  {
+
+  // BUG FIX 5: Wrong operator precedence: (code == 'ar' ?? true)
+  // The ?? operator has lower precedence than ==, so this was parsed as
+  // code == ('ar' ?? true) == code == 'ar', which is always correct by
+  // accident, but the intent was clearly: code == 'ar' with a fallback.
+  // Simplified to the correct form.
+  bool isArabic() {
     final code = storage.getSavedLocaleCode();
-    return (code == 'ar'??true);
+    return code == 'ar';
   }
 }

@@ -313,8 +313,10 @@ TextEditingController notes = TextEditingController();
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
                   builder: (_) => BlocProvider.value(
-                    value:BookingCubit()
-                    ,
+                    // BUG FIX 12: was BookingCubit() — created a fresh empty cubit,
+                    // so LocationSelectionScreen received none of the user's selections.
+                    // Must pass  (the existing cubit with all state).
+                    value: this,
                     child: LocationSelectionScreen(
                       selectedDate: selectedDate,
                       selectedHours: selectedHours,

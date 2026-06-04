@@ -1,31 +1,56 @@
 import 'package:dohamaid/features/welcome/cubit/welcome_state.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../presentation/welcome_screen.dart';
 
 class WelcomeCubit extends Cubit<WelcomeState> {
   WelcomeCubit()
-      : super(WelcomeState(logoOpacity: 0, textOpacity: 0, buttonsOpacity: 0));
+      : super(
+    WelcomeState(logoOpacity: 0, textOpacity: 0, buttonsOpacity: 0),
+  );
+  bool isScreenAlreadyOpen(BuildContext context, Type screenType) {
+    bool isOpen = false;
 
-  // BUG FIX 6: resetState previously called _navigateIfNotOpen which had
-  // inverted logic — it navigated when screen WAS already open, and did
-  // nothing when it wasn't. This caused infinite navigation loops on
-  // language toggle. Now it simply resets and replays the animation.
-  void resetState() {
-    emit(WelcomeState(logoOpacity: 0, textOpacity: 0, buttonsOpacity: 0));
-    startAnimation();
+    Navigator.popUntil(context, (route) {
+      if (route.settings.name == "$screenType") {
+        isOpen = true;
+      }
+      return true;
+    });
+
+    return isOpen;
   }
+  void _navigateIfNotOpen(
+      BuildContext context, {
+        required Widget screen,
+        required String routeName,
+      }) {
+    if (isScreenAlreadyOpen(context, screen.runtimeType)) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const WelcomeScreen(),    settings: const RouteSettings(name: "WelcomeScreen"),
+        ),
+            (route) => false,
+      );
 
+    }
+  }
+  void resetState(BuildContext context) {
+    _navigateIfNotOpen(
+      context,
+      screen: const WelcomeScreen(),
+      routeName: "WelcomeScreen",
+    );// or reload data as needed
+  }
   void startAnimation() async {
-    if (isClosed) return; // BUG FIX 7: guard emit-after-close
     await Future.delayed(const Duration(milliseconds: 300));
-    if (isClosed) return;
     emit(state.copyWith(logoOpacity: 1));
 
     await Future.delayed(const Duration(milliseconds: 300));
-    if (isClosed) return;
     emit(state.copyWith(textOpacity: 1));
 
     await Future.delayed(const Duration(milliseconds: 300));
-    if (isClosed) return;
     emit(state.copyWith(buttonsOpacity: 1));
   }
 }

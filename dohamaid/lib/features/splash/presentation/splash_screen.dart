@@ -11,7 +11,7 @@ import '../cubit/splash_state.dart';
 import 'package:dohamaid/core/config/app_color.dart';
 
 class SplashScreen extends StatelessWidget {
-   const SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class SplashScreen extends StatelessWidget {
                       child: Transform.translate(
                         offset: Offset(0, state.textOffset),
                         child:  Text(
-              "splash_subtitle".tr()
+                          "splash_subtitle".tr()
                           ,
                           textAlign: TextAlign.center,
                           style: TextStyle(

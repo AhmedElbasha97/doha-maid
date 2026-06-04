@@ -107,7 +107,7 @@ class MyApp extends StatelessWidget {
             listeners: [
               BlocListener<NotificationCubit, NotificationState>(
                 listenWhen: (previous, current) =>
-                    previous.route != current.route && current.route != null,
+                previous.route != current.route && current.route != null,
                 listener: (context, state) async {
                   await _handleNotificationNavigation(context, state);
                 },
@@ -141,9 +141,9 @@ class MyApp extends StatelessWidget {
   }
 
   Future<void> _handleNotificationNavigation(
-    BuildContext context,
-    NotificationState state,
-  ) async {
+      BuildContext context,
+      NotificationState state,
+      ) async {
     final navigator = appNavigatorKey.currentState;
     if (navigator == null || state.route == null || state.route!.isEmpty) return;
 

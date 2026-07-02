@@ -18,6 +18,8 @@ class NursingCompaniesCubit extends Cubit<NursingCompaniesState> with ChangeNoti
   int currentPage = 1;
   bool isLoadingMore = false;
   bool hasMore = true;
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
 
   bool isScreenAlreadyOpen(BuildContext context, Type screenType) {
     bool isOpen = false;
@@ -65,6 +67,7 @@ class NursingCompaniesCubit extends Cubit<NursingCompaniesState> with ChangeNoti
     emit(NursingCompaniesLoading());
     currentPage = 1;
     hasMore = true;
+    _searchQuery = '';
 
     try {
       final data = await CompaniesServices(ApiService()).getAllNursingCompanies( currentPage);
@@ -75,7 +78,12 @@ class NursingCompaniesCubit extends Cubit<NursingCompaniesState> with ChangeNoti
 
       _createAnimations(nursingCompanies?.length??0);
 
-      emit(NursingCompaniesLoaded(nursingCompanies, hasMore: hasMore));
+      emit(NursingCompaniesLoaded(
+        nursingCompanies,
+        displayedCompanies: _applySearch(nursingCompanies),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
       controller.forward();
     } catch (e) {
       emit(NursingCompaniesError(e.toString()));
@@ -87,7 +95,11 @@ class NursingCompaniesCubit extends Cubit<NursingCompaniesState> with ChangeNoti
     if (isLoadingMore || !hasMore) return;
 
     isLoadingMore = true;
-    emit(NursingCompaniesLoadingMore(nursingCompanies));
+    emit(NursingCompaniesLoadingMore(
+      nursingCompanies,
+      displayedCompanies: _applySearch(nursingCompanies),
+      searchQuery: _searchQuery,
+    ));
 
     currentPage++;
 
@@ -103,13 +115,48 @@ class NursingCompaniesCubit extends Cubit<NursingCompaniesState> with ChangeNoti
       }
 
       isLoadingMore = false;
-      emit(NursingCompaniesLoaded(nursingCompanies, hasMore: hasMore));
+      emit(NursingCompaniesLoaded(
+        nursingCompanies,
+        displayedCompanies: _applySearch(nursingCompanies),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
     } catch (e) {
       isLoadingMore = false;
       emit(NursingCompaniesError(e.toString()));
     }
 
 
+  }
+
+
+  /// Filters the already-fetched list locally — does NOT hit the network.
+  List<WorkerCompanyData> _applySearch(List<WorkerCompanyData>? all) {
+    final list = all ?? [];
+    if (_searchQuery.isEmpty) return List<WorkerCompanyData>.from(list);
+    final q = _searchQuery.toLowerCase();
+    return list.where((c) => (c.name ?? '').toLowerCase().contains(q)).toList();
+  }
+
+  /// Updates the search query and re-emits the current list filtered locally.
+  /// Works whether the list is fully loaded or still paginating —
+  /// new pages fetched afterwards will also be filtered by this query.
+  void search(String query,BuildContext context) {
+    _searchQuery = query.trim();
+    final displayed = _applySearch(nursingCompanies);
+    if(displayed.length < 10){
+      if (isLoadingMore || !hasMore) return;
+      loadMore(context);
+    }
+
+    if (state is NursingCompaniesLoaded || state is NursingCompaniesLoadingMore) {
+      emit(NursingCompaniesLoaded(
+        nursingCompanies,
+        displayedCompanies: displayed,
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
+    }
   }
 
   void _createAnimations(int count) {

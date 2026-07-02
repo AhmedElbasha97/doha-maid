@@ -31,6 +31,15 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     return isOpen;
   }
+  String getYearFromIsoString(String dateString) {
+    try {
+      final dateTime = DateTime.parse(dateString);
+      return "${dateTime.year}";
+    } catch (e) {
+      // Fallback if the string is malformed
+      return "${DateTime.now().year}"  ;
+    }
+  }
   void _navigateIfNotOpen(
       BuildContext context, {
         required Widget screen,

@@ -18,6 +18,8 @@ class AntiBugCompaniesCubit extends Cubit<AntiBugCompaniesState> with ChangeNoti
   int currentPage = 1;
   bool isLoadingMore = false;
   bool hasMore = true;
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
 
   bool isScreenAlreadyOpen(BuildContext context, Type screenType) {
     bool isOpen = false;
@@ -65,6 +67,7 @@ class AntiBugCompaniesCubit extends Cubit<AntiBugCompaniesState> with ChangeNoti
     emit(AntiBugCompaniesLoading());
     currentPage = 1;
     hasMore = true;
+    _searchQuery = '';
 
     try {
       final data = await CompaniesServices(ApiService()).getAllAntiBugCompanies( currentPage);
@@ -74,7 +77,12 @@ class AntiBugCompaniesCubit extends Cubit<AntiBugCompaniesState> with ChangeNoti
 
       _createAnimations(antiBugCompanies?.length??0);
 
-      emit(AntiBugCompaniesLoaded(antiBugCompanies, hasMore: hasMore));
+      emit(AntiBugCompaniesLoaded(
+        antiBugCompanies,
+        displayedCompanies: _applySearch(antiBugCompanies),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
       controller.forward();
     } catch (e) {
       emit(AntiBugCompaniesError(e.toString()));
@@ -86,7 +94,11 @@ class AntiBugCompaniesCubit extends Cubit<AntiBugCompaniesState> with ChangeNoti
       if (isLoadingMore || !hasMore) return;
 
       isLoadingMore = true;
-      emit(AntiBugCompaniesLoadingMore(antiBugCompanies));
+      emit(AntiBugCompaniesLoadingMore(
+      antiBugCompanies,
+      displayedCompanies: _applySearch(antiBugCompanies),
+      searchQuery: _searchQuery,
+    ));
 
       currentPage++;
 
@@ -103,12 +115,45 @@ class AntiBugCompaniesCubit extends Cubit<AntiBugCompaniesState> with ChangeNoti
         }
 
         isLoadingMore = false;
-        emit(AntiBugCompaniesLoaded(antiBugCompanies, hasMore: hasMore));
+        emit(AntiBugCompaniesLoaded(
+        antiBugCompanies,
+        displayedCompanies: _applySearch(antiBugCompanies),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
       } catch (e) {
         isLoadingMore = false;
         emit(AntiBugCompaniesError(e.toString()));
       }
     }
+
+
+  /// Filters the already-fetched list locally — does NOT hit the network.
+  List<WorkerCompanyData> _applySearch(List<WorkerCompanyData>? all) {
+    final list = all ?? [];
+    if (_searchQuery.isEmpty) return List<WorkerCompanyData>.from(list);
+    final q = _searchQuery.toLowerCase();
+    return list.where((c) => (c.name ?? '').toLowerCase().contains(q)).toList();
+  }
+
+
+  void search(String query,BuildContext context) {
+    _searchQuery = query.trim();
+    final displayed = _applySearch(antiBugCompanies);
+    if(displayed.length < 10){
+      if (isLoadingMore || !hasMore) return;
+      loadMore(context);
+    }
+
+    if (state is AntiBugCompaniesLoaded || state is AntiBugCompaniesLoadingMore) {
+      emit(AntiBugCompaniesLoaded(
+        antiBugCompanies,
+        displayedCompanies: displayed,
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
+    }
+  }
 
   void _createAnimations(int count) {
     fadeAnimations = List.generate(

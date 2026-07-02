@@ -18,6 +18,8 @@ class WorkerSuppliersCubit extends Cubit<WorkerSuppliersState> with ChangeNotifi
 
   bool isLoadingMore = false;
   bool hasMore = true;
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
   bool isScreenAlreadyOpen(BuildContext context, Type screenType) {
     bool isOpen = false;
 
@@ -64,6 +66,7 @@ class WorkerSuppliersCubit extends Cubit<WorkerSuppliersState> with ChangeNotifi
     emit(WorkerSuppliersLoading());
     currentPage = 1;
     hasMore = true;
+    _searchQuery = '';
 
     try {
       final data = await CompaniesServices(ApiService()).getAllWorkerSuppliers( currentPage);
@@ -74,19 +77,27 @@ class WorkerSuppliersCubit extends Cubit<WorkerSuppliersState> with ChangeNotifi
 
       _createAnimations(workerSuppliers?.length??0);
 
-      emit(WorkerSuppliersLoaded(workerSuppliers, hasMore: hasMore));
+      emit(WorkerSuppliersLoaded(
+        workerSuppliers,
+        displayedCompanies: _applySearch(workerSuppliers),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
       controller.forward();
     } catch (e) {
       emit(WorkerSuppliersError(e.toString()));
     }
   }
 
-  // 🔥 Load More Data
   Future<void> loadMore( BuildContext context) async {
     if (isLoadingMore || !hasMore) return;
 
     isLoadingMore = true;
-    emit(WorkerSuppliersLoadingMore(workerSuppliers));
+    emit(WorkerSuppliersLoadingMore(
+      workerSuppliers,
+      displayedCompanies: _applySearch(workerSuppliers),
+      searchQuery: _searchQuery,
+    ));
 
     currentPage++;
 
@@ -102,13 +113,46 @@ class WorkerSuppliersCubit extends Cubit<WorkerSuppliersState> with ChangeNotifi
       }
 
       isLoadingMore = false;
-      emit(WorkerSuppliersLoaded(workerSuppliers, hasMore: hasMore));
+      emit(WorkerSuppliersLoaded(
+        workerSuppliers,
+        displayedCompanies: _applySearch(workerSuppliers),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
     } catch (e) {
       isLoadingMore = false;
       emit(WorkerSuppliersError(e.toString()));
     }
 
 
+  }
+
+
+  /// Filters the already-fetched list locally — does NOT hit the network.
+  List<WorkerCompanyData> _applySearch(List<WorkerCompanyData>? all) {
+    final list = all ?? [];
+    if (_searchQuery.isEmpty) return List<WorkerCompanyData>.from(list);
+    final q = _searchQuery.toLowerCase();
+    return list.where((c) => (c.name ?? '').toLowerCase().contains(q)).toList();
+
+  }
+
+  void search(String query,BuildContext context) {
+    _searchQuery = query.trim();
+    final displayed = _applySearch(workerSuppliers);
+    if(displayed.length < 10){
+      if (isLoadingMore || !hasMore) return;
+      loadMore(context);
+    }
+
+    if (state is WorkerSuppliersLoaded || state is WorkerSuppliersLoadingMore) {
+      emit(WorkerSuppliersLoaded(
+        workerSuppliers,
+        displayedCompanies: displayed,
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
+    }
   }
 
   void _createAnimations(int count) {

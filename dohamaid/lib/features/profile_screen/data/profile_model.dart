@@ -4,6 +4,7 @@ class ProfileModel {
   final String? mobile;
   final String email;
   final String createdAt;
+  final String credit;
 
 
   ProfileModel({
@@ -12,6 +13,7 @@ class ProfileModel {
     required this.mobile,
     required this.email,
     required this.createdAt,
+    required this.credit,
   });
 
 
@@ -21,7 +23,7 @@ class ProfileModel {
       name: json['name'],
       mobile: json['mobile'],
       email: json['email'],
-      createdAt: json['created_at'],
+      createdAt: json['created_at'], credit: "${json["balance"]}",
     );
   }
 }

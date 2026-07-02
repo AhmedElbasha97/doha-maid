@@ -38,64 +38,7 @@ class WelcomeScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
-                                onTap: (){
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const HomeScreen(),
-                                        settings: const RouteSettings(name: "HomeScreen"),)
-                                  );
-                                },
-                                child:  Row(
-                                  children: [
-                                    Container(
 
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-
-                                      ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Container(
-
-                                            decoration: BoxDecoration(
-                                              color:  AppColor.mainColor,
-
-                                              borderRadius: BorderRadius.circular(50),
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                  color: AppColor.grey,
-                                                  blurRadius: 2,
-                                                  offset: Offset(1, 1), // Shadow position
-                                                ),
-                                              ],
-                                            ),
-                                            child: const Center(
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(4.0),
-                                                  child: Icon(Icons.home,color: AppColor.white,size: 15,),
-                                                )
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10,),
-                                    Text("skipToHomeBTN".tr(),
-                                      textAlign: TextAlign.center,
-                                      style:   TextStyle(
-                                          fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
-                                          color: AppColor.mainColor,
-
-                                          fontWeight: FontWeight.w800,
-                                          fontSize: 13),),
-
-
-                                  ],
-                                ),
-                              ),
                               InkWell(
                                 onTap: (){
                                   context.read<LocalizationCubit>().toggleLanguage(context);
@@ -215,6 +158,16 @@ class WelcomeScreen extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder: (_) => const RegisterScreen(),
                                       settings: const RouteSettings(name: "RegisterScreen"),)
+                                ),
+                              ), const SizedBox(height: 12),
+                              buildButton(
+                                context,
+                                text:"skipToHomeBTN".tr(),
+                                onTap: () =>  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const HomeScreen(),
+                                      settings: const RouteSettings(name: "HomeScreen"),)
                                 ),
                               ),
 

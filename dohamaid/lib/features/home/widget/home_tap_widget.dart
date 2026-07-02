@@ -35,7 +35,7 @@ class HomeTapWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundColor: AppColor.white.withOpacity(0.2),
-              radius: 22,
+              radius: 30,
               child: Image.asset(icon, ),
             ),
             const SizedBox(width: 12),
@@ -43,7 +43,7 @@ class HomeTapWidget extends StatelessWidget {
               child: Text(
                 title,
                 style:  TextStyle(
-                  color: AppColor.white,
+                  color: AppColor.black,
                   fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

@@ -22,6 +22,7 @@ import 'features/auth/sign_up/cubit/regestier_cubit.dart';
 import 'features/companies/anti_bug_companies/cubit/anti_bug_companies_cubit.dart';
 import 'features/companies/booking_screens/cubit/booking_cubit.dart';
 import 'features/companies/cleaning_companies/cubit/cleaning_companies_cubit.dart';
+import 'features/companies/cleanning_services/cleaning_services/cubit/cleaning_services_cubit.dart';
 import 'features/companies/company_details/cubit/company_details_cubit.dart';
 import 'features/companies/nursing_companies/cubit/nursing_companies_cubit.dart';
 import 'features/companies/payment/cubit/payment_cubit.dart';
@@ -57,20 +58,32 @@ void main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ar')],
+      supportedLocales: const [ Locale('ar'),Locale('en'),],
       path: 'assets/lang',
-      fallbackLocale: const Locale('en'),
+      fallbackLocale: const Locale('ar'),
       startLocale: initialLocale,
       child: MyApp(storage: storage),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final StorageLocalDataSource storage;
 
   const MyApp({super.key, required this.storage});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      StorageLocalDataSource.instance.saveLocaleCode(context.locale.languageCode);
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -80,12 +93,12 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (_) => LocalizationCubit(storage)..loadLocale(context),
+              create: (_) => LocalizationCubit(widget.storage)..loadLocale(context),
             ),
             BlocProvider(create: (_) => LoginCubit()),
             BlocProvider(create: (_) => RegisterCubit()),
             BlocProvider(create: (_) => PaymentCubit()),
-            BlocProvider(create: (_) => ThemeCubit(storage)..loadTheme()),
+            BlocProvider(create: (_) => ThemeCubit(widget.storage)..loadTheme()),
             BlocProvider(create: (_) => SplashCubit()..startSplashAnimation()),
             BlocProvider(create: (_) => WelcomeCubit()..startAnimation()),
             BlocProvider(create: (_) => HomeCubit()),
@@ -97,6 +110,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (_) => AntiBugCompaniesCubit()),
             BlocProvider(create: (_) => WorkerSuppliersCubit()),
             BlocProvider(create: (_) => CompanyDetailsCubit()),
+            BlocProvider(create: (_) => CleaningServicesCubit()),
             BlocProvider(create: (_) => DrawerCubit()),
             BlocProvider(
               create: (_) => NotificationCubit(PushNotificationService())

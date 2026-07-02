@@ -134,6 +134,7 @@ class CompaniesTapWidget extends StatelessWidget {
                 Align(
                   alignment: StorageLocalDataSource.instance.getSavedLocaleCode() == "en"?Alignment.centerRight:Alignment.centerLeft,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
                         onTap:onTap,

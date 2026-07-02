@@ -12,6 +12,7 @@ import '../../widget/companies_tap_widget.dart';
 import '../cubit/cleaning_comanies_state.dart';
 import '../cubit/cleaning_companies_cubit.dart';
 import 'package:dohamaid/core/config/app_color.dart';
+import '../../widget/companies_search_bar.dart';
 
 
 
@@ -27,6 +28,7 @@ class _CleaningCompaniesScreenState extends State<CleaningCompaniesScreen>
 
   late AnimationController controller;
   final ScrollController scrollController = ScrollController();
+  final TextEditingController _searchCtrl = TextEditingController();
   final GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
 
   @override
@@ -45,6 +47,14 @@ class _CleaningCompaniesScreenState extends State<CleaningCompaniesScreen>
         cubit.loadMore(context);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    scrollController.dispose();
+    _searchCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -90,8 +100,17 @@ class _CleaningCompaniesScreenState extends State<CleaningCompaniesScreen>
         }, icon: const Icon(Icons.arrow_forward_ios, color:  AppColor.mainColor)) ],
       ),
 
-      body: BlocBuilder<CleaningCompaniesCubit, CleaningCompaniesState>(
-        builder: (context, state) {
+      body: Column(
+        children: [
+          CompaniesSearchBar(
+            controller: _searchCtrl,
+            hintKey: 'search_companies_hint',
+            onChanged: (q) => context.read<CleaningCompaniesCubit>().search(q,context),
+            onCleared: () => context.read<CleaningCompaniesCubit>().search('',context),
+          ),
+          Expanded(
+            child: BlocBuilder<CleaningCompaniesCubit, CleaningCompaniesState>(
+              builder: (context, state) {
 
           if (state is CleaningCompaniesLoading) {
             return const Loader();
@@ -103,21 +122,26 @@ class _CleaningCompaniesScreenState extends State<CleaningCompaniesScreen>
 
           if (state is CleaningCompaniesLoaded || state is CleaningCompaniesLoadingMore) {
             final cubit = context.read<CleaningCompaniesCubit>();
-            if (cubit.cleaningCompanies?.isEmpty??true) {
+            final displayed = (state is CleaningCompaniesLoaded
+                ? state.displayedCompanies
+                : (state as CleaningCompaniesLoadingMore).displayedCompanies) ??
+                cubit.cleaningCompanies ??
+                [];
+            if (displayed.isEmpty) {
               return const NoDataWidget();
             } else {
               return SafeArea(
                 child: ListView.builder(
                   controller: scrollController,
                   padding: const EdgeInsets.all(16),
-                  itemCount: (cubit.cleaningCompanies?.length ?? 0) +
+                  itemCount: (displayed.length) +
                       (cubit.hasMore? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (index == cubit.cleaningCompanies?.length) {
+                    if (index == displayed.length&&cubit.isLoadingMore ) {
                       return const CompaniesMoreDataLoader();
                     }
 
-                    final item = cubit.cleaningCompanies?[index];
+                    final item = displayed[index];
 
                     return AnimatedBuilder(
                       animation: controller,
@@ -157,9 +181,12 @@ class _CleaningCompaniesScreenState extends State<CleaningCompaniesScreen>
             }
           }
 
-          return const SizedBox();
+          return const SizedBox.shrink();
         },
       ),
+      ),
+        ],
+    ),
     );
   }
 

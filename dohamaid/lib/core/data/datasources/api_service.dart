@@ -17,7 +17,10 @@ class ApiService {
       ..baseUrl = ApiConstant.baseUrl
       ..connectTimeout = const Duration(seconds: 15)
       ..receiveTimeout = const Duration(seconds: 15)
+
       ..headers = {
+
+
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
@@ -46,9 +49,9 @@ class ApiService {
             options.headers['Authorization'] = 'Bearer $token';
 
           }
-            if (localLang.isNotEmpty) {
-              options.headers['x-locale'] = localLang;
-            }
+
+           options.headers['x-locale'] = localLang ?? 'ar'; // sensible default
+
           return handler.next(options);
         },
       ),

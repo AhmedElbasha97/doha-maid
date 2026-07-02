@@ -7,15 +7,33 @@ class NursingCompaniesInitial extends NursingCompaniesState {}
 class NursingCompaniesLoading extends NursingCompaniesState {}
 
 class NursingCompaniesLoaded extends NursingCompaniesState {
+  /// All items accumulated across pages.
   final List<WorkerCompanyData>? nursingCompanies;
-  final bool hasMore;
 
-  NursingCompaniesLoaded(this.nursingCompanies,{this.hasMore = true});
+  /// Items after applying [searchQuery] — what the list renders.
+  final List<WorkerCompanyData>? displayedCompanies;
+
+  final bool hasMore;
+  final String searchQuery;
+
+  NursingCompaniesLoaded(
+    this.nursingCompanies, {
+    this.displayedCompanies,
+    this.hasMore = true,
+    this.searchQuery = '',
+  });
 }
 
 class NursingCompaniesLoadingMore extends NursingCompaniesState {
   final List<WorkerCompanyData>? nursingCompanies;
-  NursingCompaniesLoadingMore(this.nursingCompanies);
+  final List<WorkerCompanyData>? displayedCompanies;
+  final String searchQuery;
+
+  NursingCompaniesLoadingMore(
+    this.nursingCompanies, {
+    this.displayedCompanies,
+    this.searchQuery = '',
+  });
 }
 class NursingCompaniesError extends NursingCompaniesState {
   final String message;

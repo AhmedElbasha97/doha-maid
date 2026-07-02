@@ -8,13 +8,19 @@ class HomeServices {
   HomeServices(this.api);
 
   Future<HomeModel?> getAllHomeTaps() async {
-    // BUG FIX 10: getSavedLocaleCode() is synchronous — removed incorrect `await`.
-    // The file had // ignore_for_file: await_only_futures to suppress the warning,
-    // masking this bug instead of fixing it.
+
     final local = StorageLocalDataSource.instance.getSavedLocaleCode();
     final resp = await api.get(ApiConstant.homeLink, data: {"x-locale": local});
     final data = resp.data;
     if (data == null) return null;
     return HomeModel.fromJson(data);
+  }
+  Future<bool?> checkAllHomeTaps(String? homeTapId) async {
+
+    final local = StorageLocalDataSource.instance.getSavedLocaleCode();
+    final resp = await api.post(ApiConstant.checkerForHomeLink, data: {"section_id": homeTapId});
+    final data = resp.data;
+    if (data == null) return null;
+    return resp.data["data"]["active"] == 1 ;
   }
 }

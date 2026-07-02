@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/data/datasources/storage_local_data_source.dart';
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../loader.dart';
 import '../../../../widget/no_data_widget.dart';
@@ -166,14 +167,15 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen>
                                 Expanded(
                                     flex: 2,
                                     child: Text("company_details_phone_label".tr(),
-                                        style: const TextStyle(
+                                        style:  TextStyle(
+                                            fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
                                        )),
                                 Expanded(
                                   flex: 3,
                                   child:
-                                  callButton(data?.data?.mobile??""),
+                                  callButton(context.read<LocalizationCubit>().isArabic()?"يتصل":"call"),
                                 ),
 
                               ],
@@ -197,14 +199,15 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen>
                                 Expanded(
                                     flex: 2,
                                     child: Text("company_details_whatsapp_label".tr(),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
                                        )),
                                 Expanded(
                                   flex: 3,
                                   child:
-                                  whatsappButton(data?.data?.whatsapp??""),
+                                  whatsappButton(context.read<LocalizationCubit>().isArabic()?"واتساب":"Whats App"),
                                 ),
 
                               ],
@@ -228,14 +231,15 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen>
                                 Expanded(
                                     flex: 2,
                                     child: Text("company_details_email_label".tr(),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
                                        )),
                                 Expanded(
                                   flex: 12,
                                   child:
-                                  emailButton(data?.data?.email??""),
+                                  emailButton( context.read<LocalizationCubit>().isArabic()? "أرسل بريدًا إلكترونيًا":"Send an email"),
                                 ),
 
                               ],
@@ -381,11 +385,16 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen>
         children: [
           Expanded(
               child: Text("$title:",
-                  style: const TextStyle(
+                  style:  TextStyle(
+                      fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                       fontSize: 16, fontWeight: FontWeight.bold), )),
           Expanded(
               child:
-              Text(value, style: const TextStyle(fontSize: 16), textAlign: TextAlign.right)),
+              Text(value, style:  TextStyle(
+                  fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
+                  fontSize: 16), textAlign: TextAlign.right)),
 
         ],
       ),
@@ -445,7 +454,9 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen>
             const SizedBox(width: 12),
             Text(
               phone,
-              style: const TextStyle(
+              style:  TextStyle(
+                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                 color: AppColor.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -511,7 +522,9 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen>
             const SizedBox(width: 9),
             Text(
               phone,
-              style: const TextStyle(
+              style:  TextStyle(
+                fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                 color: AppColor.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,

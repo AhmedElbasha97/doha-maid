@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import '../../companies/anti_bug_companies/presentaion/anti_bug_companies_screen.dart';
 import '../../companies/cleaning_companies/presentation/cleaning_companies_screen.dart';
+import '../../companies/cleanning_services/cleaning_services/presentation/cleaning_services_screen.dart';
 import '../../companies/nursing_companies/presentation/nursing_companies_screen.dart';
 import '../../companies/worker_suppliers/presentation/worker_suppliers_screen.dart';
 import '../../drawer/cubit/drawer_cubit.dart';
@@ -122,7 +123,7 @@ actions: const [SizedBox()],
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: state.homeData.length,
+              itemCount: (state.homeData.length-1),
               itemBuilder: (context, index) {
                 return AnimatedBuilder(
                   animation: controller,
@@ -139,7 +140,15 @@ actions: const [SizedBox()],
                     title: state.homeData[index].name ?? "",
                     icon: cubit.icons[index],
                     onTap: () {
-                      if (index == 0) {
+                      if ("cleaning services" ==  state.homeData[index].url) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const CleaningServicesScreen(),
+                              settings: const RouteSettings(name: "cleaning services"),
+                          ),
+                        );
+                      }else if ("WorkerCompaniesScreen" ==  state.homeData[index].url) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -147,7 +156,7 @@ actions: const [SizedBox()],
                               settings: const RouteSettings(name: "WorkerCompaniesScreen"),
                           ),
                         );
-                      }else if (index == 1) {
+                      }else if ("CleaningCompaniesScreen" ==  state.homeData[index].url) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -155,19 +164,19 @@ actions: const [SizedBox()],
                               settings: const RouteSettings(name: "CleaningCompaniesScreen"),
                           ),
                         );
-                      } else if (index == 2) {
+                      } else if ("AntiBugCompaniesScreen" ==  state.homeData[index].url) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => const AntiBugCompaniesScreen(),
                               settings: const RouteSettings(name: "AntiBugCompaniesScreen"),)
-                        );} else if (index == 3) {
+                        );} else if ("NursingCompaniesScreen" ==  state.homeData[index].url) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => const NursingCompaniesScreen(),
                               settings: const RouteSettings(name: "NursingCompaniesScreen"),)
-                        );} else if (index == 4) {
+                        );} else if ("WorkerSuppliersScreen" ==  state.homeData[index].url) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(

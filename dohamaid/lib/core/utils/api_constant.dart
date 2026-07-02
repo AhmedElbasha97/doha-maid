@@ -8,6 +8,7 @@ class ApiConstant {
    static String loggingOutLink = "logout";//get
    static String deletingLink = "user/delete";//get
   static String homeLink = "settings";//get
+   static String checkerForHomeLink = "/sections/status";//post
   static String workerCompaniesLink = "companies/1";//get
   static String cleaningCompaniesLink = "companies/2";//get
   static String antiBugCompaniesLink = "companies/3";//get
@@ -20,10 +21,13 @@ class ApiConstant {
   static String bookingHoursLink = "booking/hours";//get
   static String bookingWorkersLink = "booking/workers";//get
   static String bookingTimesLink = "booking/times";//get
+    static String getUserBalance = "balance";//get
   static String checkingPricesOfBookingLink = "booking/pricing";//post
   static String bookingForCompanyServicesLink = "booking/new";
 
   static String bookingListLink = "booking/list";//get
   static String locationListLink = "locations";//get
+  static String bookingCancelStatusLink = "/booking/cancel/status";//post
+  static String bookingCancelLink = "/booking/cancel";//post
 
 }

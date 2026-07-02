@@ -181,7 +181,7 @@ class PaymentCubit extends Cubit<PaymentState> {
                   (route) => false,
             );
           }else{
-            if(data.success == true){
+          if(data.success == true){
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -196,8 +196,9 @@ class PaymentCubit extends Cubit<PaymentState> {
                 ),
               );
             }
+
           }
-          });
+        });
 
       } else {
         _showSnack(context, "reservation_error_alert".tr(), isError: true);

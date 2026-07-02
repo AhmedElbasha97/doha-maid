@@ -29,7 +29,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
 
     final cubit = context.read<BookingCubit>();
-;
+
    cubit.initDefaultDate(widget.servicesId);
   }
 

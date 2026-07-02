@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/data/datasources/storage_local_data_source.dart';
+import '../../../../core/presentation/cubit/localization_cubit.dart';
 import '../../../auth/sign_in/presentation/log_in_screen.dart';
 import '../../../auth/sign_up/presentation/regestier_screen.dart';
 import '../../booking_screens/presentation/booking_screen.dart';
@@ -116,7 +117,9 @@ class CleaningServicesTap extends StatelessWidget {
               children: [
                 Text(
                   companyServices?.name??"",
-                  style: const TextStyle(
+                  style:  TextStyle(
+                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                     fontSize: 18,
                     color: AppColor.secondaryColor,
                     fontWeight: FontWeight.bold,
@@ -125,7 +128,9 @@ class CleaningServicesTap extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   "${companyServices?.price} ${"currencyQAR".tr()}",
-                  style: const TextStyle(
+                  style:  TextStyle(
+                    fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                     fontSize: 14,
                     color: AppColor.black87,
                   ),
@@ -176,7 +181,9 @@ class CleaningServicesTap extends StatelessWidget {
                           child:  Text(
                             "reservationOfServices".tr(),
                             maxLines: 2,
-                            style: const TextStyle(
+                            style:  TextStyle(
+                              fontFamily: context.read<LocalizationCubit>().isArabic()?"Cairo":"Montserrat",
+
                               color: AppColor.white,
                               fontSize: 14,
                             ),

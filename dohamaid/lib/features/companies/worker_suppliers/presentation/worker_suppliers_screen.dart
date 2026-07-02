@@ -12,6 +12,7 @@ import '../../widget/companies_tap_widget.dart';
 import '../cubit/worker_suppliers_cubit.dart';
 import '../cubit/worker_suppliers_state.dart';
 import 'package:dohamaid/core/config/app_color.dart';
+import '../../widget/companies_search_bar.dart';
 
 
 
@@ -28,6 +29,7 @@ class _WorkerSuppliersScreenState extends State<WorkerSuppliersScreen>
 
   late AnimationController controller;
   final ScrollController scrollController = ScrollController();
+  final TextEditingController _searchCtrl = TextEditingController();
   final GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
 
   @override
@@ -46,6 +48,14 @@ class _WorkerSuppliersScreenState extends State<WorkerSuppliersScreen>
         cubit.loadMore(context);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    scrollController.dispose();
+    _searchCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -90,8 +100,17 @@ class _WorkerSuppliersScreenState extends State<WorkerSuppliersScreen>
     }, icon: const Icon(Icons.arrow_forward_ios, color:  AppColor.mainColor))],
       ),
 
-      body: BlocBuilder<WorkerSuppliersCubit, WorkerSuppliersState>(
-        builder: (context, state) {
+      body: Column(
+        children: [
+          CompaniesSearchBar(
+            controller: _searchCtrl,
+            hintKey: 'search_companies_hint',
+            onChanged: (q) => context.read<WorkerSuppliersCubit>().search(q,context),
+            onCleared: () => context.read<WorkerSuppliersCubit>().search('',context),
+          ),
+          Expanded(
+            child: BlocBuilder<WorkerSuppliersCubit, WorkerSuppliersState>(
+              builder: (context, state) {
 
           if (state is WorkerSuppliersLoading) {
             return const Loader();
@@ -103,20 +122,25 @@ class _WorkerSuppliersScreenState extends State<WorkerSuppliersScreen>
 
           if (state is WorkerSuppliersLoaded || state is WorkerSuppliersLoadingMore) {
             final cubit = context.read<WorkerSuppliersCubit>();
-            if (cubit.workerSuppliers?.isEmpty??true) {
+            final displayed = (state is WorkerSuppliersLoaded
+                ? state.displayedCompanies
+                : (state as WorkerSuppliersLoadingMore).displayedCompanies) ??
+                cubit.workerSuppliers ??
+                [];
+            if (displayed.isEmpty) {
               return const NoDataWidget();
             } else {
               return SafeArea(
               child: ListView.builder(
                 controller: scrollController,
                 padding: const EdgeInsets.all(16),
-                itemCount:( cubit.workerSuppliers?.length??0) + (cubit.hasMore ? 1 : 0),
+                itemCount:( displayed.length??0) + (cubit.hasMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == cubit.workerSuppliers?.length) {
+                  if (index == displayed.length&&cubit.isLoadingMore ) {
                     return const CompaniesMoreDataLoader();
                   }
 
-                  final item = cubit.workerSuppliers?[index];
+                  final item = displayed[index];
 
                   return AnimatedBuilder(
                     animation: controller,
@@ -154,9 +178,12 @@ class _WorkerSuppliersScreenState extends State<WorkerSuppliersScreen>
             }
           }
 
-          return const SizedBox();
+          return const SizedBox.shrink();
         },
       ),
+      ),
+        ],
+    ),
     );
   }
 

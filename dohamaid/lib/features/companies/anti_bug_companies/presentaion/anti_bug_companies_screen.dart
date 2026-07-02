@@ -13,6 +13,7 @@ import '../../widget/companies_tap_widget.dart';
 import '../cubit/anti_bug_companies_cubit.dart';
 import '../cubit/anti_bug_companies_state.dart';
 import 'package:dohamaid/core/config/app_color.dart';
+import '../../widget/companies_search_bar.dart';
 
 
 
@@ -29,6 +30,7 @@ class _AntiBugCompaniesScreenState extends State<AntiBugCompaniesScreen>
 
   late AnimationController controller;
   final ScrollController scrollController = ScrollController();
+  final TextEditingController _searchCtrl = TextEditingController();
   final GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
 
   @override
@@ -47,6 +49,14 @@ class _AntiBugCompaniesScreenState extends State<AntiBugCompaniesScreen>
         cubit.loadMore(context);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    scrollController.dispose();
+    _searchCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,8 +99,17 @@ class _AntiBugCompaniesScreenState extends State<AntiBugCompaniesScreen>
     }, icon:  Icon(Icons.arrow_forward_ios, color:  AppColor.mainColor))]
       ),
 
-      body: BlocBuilder<AntiBugCompaniesCubit, AntiBugCompaniesState>(
-        builder: (context, state) {
+      body: Column(
+        children: [
+          CompaniesSearchBar(
+            controller: _searchCtrl,
+            hintKey: 'search_companies_hint',
+            onChanged: (q) => context.read<AntiBugCompaniesCubit>().search(q,context),
+            onCleared: () => context.read<AntiBugCompaniesCubit>().search('',context),
+          ),
+          Expanded(
+            child: BlocBuilder<AntiBugCompaniesCubit, AntiBugCompaniesState>(
+              builder: (context, state) {
 
           if (state is AntiBugCompaniesLoading) {
             return const Loader();
@@ -102,21 +121,26 @@ class _AntiBugCompaniesScreenState extends State<AntiBugCompaniesScreen>
 
           if (state is AntiBugCompaniesLoaded || state is AntiBugCompaniesLoadingMore) {
             final cubit = context.read<AntiBugCompaniesCubit>();
-            if (cubit.antiBugCompanies?.isEmpty ?? true) {
+            final displayed = (state is AntiBugCompaniesLoaded
+                ? state.displayedCompanies
+                : (state as AntiBugCompaniesLoadingMore).displayedCompanies) ??
+                cubit.antiBugCompanies ??
+                [];
+            if (displayed.isEmpty) {
               return const NoDataWidget();
             } else {
               return SafeArea(
                 child: ListView.builder(
                   controller: scrollController,
                   padding: const EdgeInsets.all(16),
-                  itemCount: (cubit.antiBugCompanies?.length ?? 0) +
+                  itemCount: (displayed.length) +
                       (cubit.hasMore? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (index == cubit.antiBugCompanies?.length) {
+                    if (index == displayed.length&&cubit.isLoadingMore ) {
                       return const CompaniesMoreDataLoader();
                     }
 
-                    final item = cubit.antiBugCompanies?[index];
+                    final item = displayed[index];
 
                     return AnimatedBuilder(
                       animation: controller,
@@ -155,9 +179,12 @@ class _AntiBugCompaniesScreenState extends State<AntiBugCompaniesScreen>
               );
             }
           }
-          return const SizedBox();
+          return const SizedBox.shrink();
         },
       ),
+      ),
+        ],
+    ),
     );
   }
 

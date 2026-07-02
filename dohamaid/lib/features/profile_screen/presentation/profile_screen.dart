@@ -101,7 +101,8 @@ class ProfileScreen extends StatelessWidget {
             _infoRow(Icons.person, "name".tr(), profile?.name ?? "",context),
             _infoRow(Icons.email_outlined, "email".tr(), profile?.email ?? "",context),
             _infoRow(Icons.phone, "phone".tr(), profile?.mobile ?? "not_available".tr(),context),
-            _infoRow(Icons.calendar_today, "created_at".tr(), profile?.createdAt ?? "",context),
+            _infoRow(Icons.calendar_today, "created_at".tr(), context.read<ProfileCubit>().getYearFromIsoString(profile?.createdAt ?? ""),context),
+            _infoRow(Icons.monetization_on, "credit".tr(),"${profile?.credit ?? ""} ${"currency".tr()}",context),
           ]),
           const SizedBox(height: 30),
 

@@ -31,8 +31,26 @@ class HomeCubit extends Cubit<HomeState> {
     "assets/icons/5.png",
     "assets/icons/6.png",
     "assets/icons/7.png",
-
-
+    "assets/icons/2.png",
+    "assets/icons/3.png",
+    "assets/icons/4.png",
+    "assets/icons/5.png",
+    "assets/icons/6.png",
+    "assets/icons/7.png",
+    "assets/icons/1.png",
+    "assets/icons/2.png",
+    "assets/icons/2.png",
+    "assets/icons/5.png",
+    "assets/icons/6.png",
+    "assets/icons/1.png",
+    "assets/icons/2.png",
+    "assets/icons/1.png",
+    "assets/icons/2.png",
+    "assets/icons/3.png",
+    "assets/icons/4.png",
+    "assets/icons/5.png",
+    "assets/icons/6.png",
+    "assets/icons/7.png",
   ];
   List<Datum> homeData = [];
 
@@ -78,30 +96,64 @@ class HomeCubit extends Cubit<HomeState> {
      "company_home2".tr(),
      "company_home3".tr(),
      "company_home4".tr(),
+     "company_home5".tr(),
    ];
     try {
       emit(HomeLoading());
 
      HomeModel? data = await HomeServices(ApiService()).getAllHomeTaps();
+    var homeTapFixedData = [
+         Datum(id: 18,name: titles[5],active: 1,url: "cleaning services"),
+    Datum(id: 1,name: titles[0],active: 1,url: "WorkerCompaniesScreen"),
+    Datum(id: 2,name: titles[1],active: 1,url: "CleaningCompaniesScreen"),
+    Datum(id: 3,name: titles[2],active: 1,url: "AntiBugCompaniesScreen"),
+    Datum(id:4,name: titles[3],active: 1,url: "NursingCompaniesScreen"),
+    Datum(id: 8,name: titles[4],active: 1,url: "WorkerSuppliersScreen")];
+    List<Datum> homeListAfterChecking = [];
+    for(var homeTap in homeTapFixedData){
+      bool? checker = await homeTapChecker("${homeTap.id??0}");
+      if(checker??false){
+        homeListAfterChecking.add(Datum(
+          id: homeTap.id,
+          name: homeTap.name,
+          active: 1,
+          url: homeTap.url
+        ));
+      }else{
+        homeListAfterChecking.add(Datum(
+            id: homeTap.id,
+            name: homeTap.name,
+            active: 0,
+            url: homeTap.url
+        ));
+      }
+    }
      if(data?.data == []){
        homeData.clear();
-       homeData.addAll([Datum(id: 1,name: titles[0],active: 1,url: "nothing"),
-         Datum(id: 2,name: titles[1],active: 1,url: "nothing"),
-         Datum(id: 3,name: titles[2],active: 1,url: "nothing"),
-         Datum(id: 4,name: titles[3],active: 1,url: "nothing"),
-         Datum(id: 5,name: titles[4],active: 1,url: "nothing")]);
-     }else{
-       homeData.clear();
-       homeData.addAll([Datum(id: 1,name: titles[0],active: 1,url: "nothing"),
-         Datum(id: 2,name: titles[1],active: 1,url: "nothing"),
-         Datum(id: 3,name: titles[2],active: 1,url: "nothing"),
-         Datum(id: 4,name: titles[3],active: 1,url: "nothing"),
-         Datum(id: 5,name: titles[4],active: 1,url: "nothing")]);
-       for(Datum? homeTap in (data!.data!) ) {
+       for(Datum? homeTap in (homeListAfterChecking) ) {
          if (homeTap?.active == 1) {
            homeData.add(homeTap!);
          }
        }
+     }else{
+       homeData.clear();
+       if(homeListAfterChecking[0].active == 1) {
+         homeData.add(homeListAfterChecking[0],);
+       }
+       for(Datum? homeTap in (data!.data!) ) {
+         if (homeTap?.active == 1) {
+           homeData.add(homeTap!);
+         }
+
+
+       }
+       homeListAfterChecking.removeAt(0);
+       for(Datum? homeTap in (homeListAfterChecking) ) {
+         if (homeTap?.active == 1) {
+           homeData.add(homeTap!);
+         }
+       }
+
      }
       _createAnimations(homeData.length);
       emit(HomeLoaded(homeData));
@@ -109,6 +161,15 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       emit(HomeError("Failed to load data"));
     }
+  }
+  Future<bool?> homeTapChecker(String? homeTapId) async {
+   try{
+     bool? data = await HomeServices(ApiService()).checkAllHomeTaps(homeTapId);
+     return data;
+   }catch (e){
+     emit(HomeError("Failed to load data"));
+   }
+   return null;
   }
   void _createAnimations(int count) {
     fadeAnimations = List.generate(

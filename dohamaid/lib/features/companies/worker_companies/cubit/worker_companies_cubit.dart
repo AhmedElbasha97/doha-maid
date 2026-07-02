@@ -18,6 +18,8 @@ class WorkerCompaniesCubit extends Cubit<WorkerCompaniesState> with ChangeNotifi
   int currentPage = 1;
   bool isLoadingMore = false;
   bool hasMore = true;
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
   bool isScreenAlreadyOpen(BuildContext context, Type screenType) {
     bool isOpen = false;
 
@@ -63,6 +65,7 @@ class WorkerCompaniesCubit extends Cubit<WorkerCompaniesState> with ChangeNotifi
     emit(WorkerCompaniesLoading());
     currentPage = 1;
     hasMore = true;
+    _searchQuery = '';
 
     try {
       final data = await CompaniesServices(ApiService()).getAllWorkerCompanies( currentPage);
@@ -73,7 +76,12 @@ class WorkerCompaniesCubit extends Cubit<WorkerCompaniesState> with ChangeNotifi
 
       _createAnimations(workerCompanies?.length??0);
 
-      emit(WorkerCompaniesLoaded(workerCompanies, hasMore: hasMore));
+      emit(WorkerCompaniesLoaded(
+        workerCompanies,
+        displayedCompanies: _applySearch(workerCompanies),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
       controller.forward();
     } catch (e) {
       emit(WorkerCompaniesError(e.toString()));
@@ -85,7 +93,11 @@ class WorkerCompaniesCubit extends Cubit<WorkerCompaniesState> with ChangeNotifi
       if (isLoadingMore || !hasMore) return;
 
       isLoadingMore = true;
-      emit(WorkerCompaniesLoadingMore(workerCompanies));
+      emit(WorkerCompaniesLoadingMore(
+      workerCompanies,
+      displayedCompanies: _applySearch(workerCompanies),
+      searchQuery: _searchQuery,
+    ));
 
       currentPage++;
 
@@ -102,7 +114,12 @@ class WorkerCompaniesCubit extends Cubit<WorkerCompaniesState> with ChangeNotifi
         }
 
         isLoadingMore = false;
-        emit(WorkerCompaniesLoaded(workerCompanies, hasMore: hasMore));
+        emit(WorkerCompaniesLoaded(
+        workerCompanies,
+        displayedCompanies: _applySearch(workerCompanies),
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
       } catch (e) {
         isLoadingMore = false;
         emit(WorkerCompaniesError(e.toString()));
@@ -110,6 +127,36 @@ class WorkerCompaniesCubit extends Cubit<WorkerCompaniesState> with ChangeNotifi
 
   }
 
+
+
+  /// Filters the already-fetched list locally — does NOT hit the network.
+  List<WorkerCompanyData> _applySearch(List<WorkerCompanyData>? all) {
+    final list = all ?? [];
+    if (_searchQuery.isEmpty) return List<WorkerCompanyData>.from(list);
+    final q = _searchQuery.toLowerCase();
+    return list.where((c) => (c.name ?? '').toLowerCase().contains(q)).toList();
+  }
+
+  /// Updates the search query and re-emits the current list filtered locally.
+  /// Works whether the list is fully loaded or still paginating —
+  /// new pages fetched afterwards will also be filtered by this query.
+  void search(String query,BuildContext context) {
+    _searchQuery = query.trim();
+    final displayed = _applySearch(workerCompanies);
+    if(displayed.length < 10){
+      if (isLoadingMore || !hasMore) return;
+      loadMore(context);
+    }
+
+    if (state is WorkerCompaniesLoaded || state is WorkerCompaniesLoadingMore) {
+      emit(WorkerCompaniesLoaded(
+        workerCompanies,
+        displayedCompanies: displayed,
+        hasMore: hasMore,
+        searchQuery: _searchQuery,
+      ));
+    }
+  }
 
   void _createAnimations(int count) {
     fadeAnimations = List.generate(

@@ -49,7 +49,7 @@ class LocalizationCubit extends Cubit<Locale> {
     try { context.read<WorkerSuppliersCubit>().resetState(context); } catch (_) {}
     try { context.read<CompanyDetailsCubit>().resetState(context); } catch (_) {}
     // BUG FIX 4: WelcomeCubit.resetState no longer takes BuildContext
-    try { context.read<WelcomeCubit>().resetState(); } catch (_) {}
+    try { context.read<WelcomeCubit>().resetState(context); } catch (_) {}
   }
 
   // BUG FIX 5: Wrong operator precedence: (code == 'ar' ?? true)

@@ -7,15 +7,33 @@ class WorkerSuppliersInitial extends WorkerSuppliersState {}
 class WorkerSuppliersLoading extends WorkerSuppliersState {}
 
 class WorkerSuppliersLoaded extends WorkerSuppliersState {
+  /// All items accumulated across pages.
   final List<WorkerCompanyData>? workerSuppliers;
-  final bool hasMore;
 
-  WorkerSuppliersLoaded(this.workerSuppliers,{this.hasMore = true});
+  /// Items after applying [searchQuery] — what the list renders.
+  final List<WorkerCompanyData>? displayedCompanies;
+
+  final bool hasMore;
+  final String searchQuery;
+
+  WorkerSuppliersLoaded(
+    this.workerSuppliers, {
+    this.displayedCompanies,
+    this.hasMore = true,
+    this.searchQuery = '',
+  });
 }
 
 class WorkerSuppliersLoadingMore extends WorkerSuppliersState {
   final List<WorkerCompanyData>? workerSuppliers;
-  WorkerSuppliersLoadingMore(this.workerSuppliers);
+  final List<WorkerCompanyData>? displayedCompanies;
+  final String searchQuery;
+
+  WorkerSuppliersLoadingMore(
+    this.workerSuppliers, {
+    this.displayedCompanies,
+    this.searchQuery = '',
+  });
 }
 class WorkerSuppliersError extends WorkerSuppliersState {
   final String message;

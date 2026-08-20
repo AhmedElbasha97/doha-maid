@@ -88,73 +88,75 @@ class HomeCubit extends Cubit<HomeState> {
   /// LOAD DATA (Fake Example)
   /// -------------------------
   Future<void> loadHomeData(AnimationController ctrl) async {
-   controller = ctrl;
-   homeData.clear();
-   titles =  [
-     "company_home".tr(),
-     "company_home1".tr(),
-     "company_home2".tr(),
-     "company_home3".tr(),
-     "company_home4".tr(),
-     "company_home5".tr(),
-   ];
+    controller = ctrl;
+    homeData.clear();
+    titles = [
+      "company_home".tr(),
+      "company_home1".tr(),
+      "company_home2".tr(),
+      "company_home3".tr(),
+      "company_home4".tr(),
+      "company_home5".tr(),
+    ];
     try {
       emit(HomeLoading());
 
-     HomeModel? data = await HomeServices(ApiService()).getAllHomeTaps();
-    var homeTapFixedData = [
-         Datum(id: 18,name: titles[5],active: 1,url: "cleaning services"),
-    Datum(id: 1,name: titles[0],active: 1,url: "WorkerCompaniesScreen"),
-    Datum(id: 2,name: titles[1],active: 1,url: "CleaningCompaniesScreen"),
-    Datum(id: 3,name: titles[2],active: 1,url: "AntiBugCompaniesScreen"),
-    Datum(id:4,name: titles[3],active: 1,url: "NursingCompaniesScreen"),
-    Datum(id: 8,name: titles[4],active: 1,url: "WorkerSuppliersScreen")];
-    List<Datum> homeListAfterChecking = [];
-    for(var homeTap in homeTapFixedData){
-      bool? checker = await homeTapChecker("${homeTap.id??0}");
-      if(checker??false){
+      final homeTapFixedData = [
+        Datum(id: 18, name: titles[5], active: 1, url: "cleaning services"),
+        Datum(id: 1,  name: titles[0], active: 1, url: "WorkerCompaniesScreen"),
+        Datum(id: 2,  name: titles[1], active: 1, url: "CleaningCompaniesScreen"),
+        Datum(id: 3,  name: titles[2], active: 1, url: "AntiBugCompaniesScreen"),
+        Datum(id: 4,  name: titles[3], active: 1, url: "NursingCompaniesScreen"),
+        Datum(id: 8,  name: titles[4], active: 1, url: "WorkerSuppliersScreen"),
+      ];
+
+      // 🚀 Fire getAllHomeTaps + all section checkers simultaneously
+      final results = await Future.wait([
+        HomeServices(ApiService()).getAllHomeTaps(),
+        ...homeTapFixedData.map(
+          (tap) => homeTapChecker("${tap.id ?? 0}"),
+        ),
+      ]);
+
+      final HomeModel? data = results[0] as HomeModel?;
+      final checkerResults = results.sublist(1).cast<bool?>();
+
+      final homeListAfterChecking = <Datum>[];
+      for (int i = 0; i < homeTapFixedData.length; i++) {
+        final tap = homeTapFixedData[i];
         homeListAfterChecking.add(Datum(
-          id: homeTap.id,
-          name: homeTap.name,
-          active: 1,
-          url: homeTap.url
-        ));
-      }else{
-        homeListAfterChecking.add(Datum(
-            id: homeTap.id,
-            name: homeTap.name,
-            active: 0,
-            url: homeTap.url
+          id: tap.id,
+          name: tap.name,
+          active: (checkerResults[i] ?? false) ? 1 : 0,
+          url: tap.url,
         ));
       }
-    }
-     if(data?.data == []){
-       homeData.clear();
-       for(Datum? homeTap in (homeListAfterChecking) ) {
-         if (homeTap?.active == 1) {
-           homeData.add(homeTap!);
-         }
-       }
-     }else{
-       homeData.clear();
-       if(homeListAfterChecking[0].active == 1) {
-         homeData.add(homeListAfterChecking[0],);
-       }
-       for(Datum? homeTap in (data!.data!) ) {
-         if (homeTap?.active == 1) {
-           homeData.add(homeTap!);
-         }
 
+      if (data?.data == []) {
+        homeData.clear();
+        for (Datum? homeTap in homeListAfterChecking) {
+          if (homeTap?.active == 1) {
+            homeData.add(homeTap!);
+          }
+        }
+      } else {
+        homeData.clear();
+        if (homeListAfterChecking[0].active == 1) {
+          homeData.add(homeListAfterChecking[0]);
+        }
+        for (Datum? homeTap in (data!.data!)) {
+          if (homeTap?.active == 1) {
+            homeData.add(homeTap!);
+          }
+        }
+        homeListAfterChecking.removeAt(0);
+        for (Datum? homeTap in homeListAfterChecking) {
+          if (homeTap?.active == 1) {
+            homeData.add(homeTap!);
+          }
+        }
+      }
 
-       }
-       homeListAfterChecking.removeAt(0);
-       for(Datum? homeTap in (homeListAfterChecking) ) {
-         if (homeTap?.active == 1) {
-           homeData.add(homeTap!);
-         }
-       }
-
-     }
       _createAnimations(homeData.length);
       emit(HomeLoaded(homeData));
       ctrl.forward();
@@ -162,14 +164,15 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeError("Failed to load data"));
     }
   }
+
   Future<bool?> homeTapChecker(String? homeTapId) async {
-   try{
-     bool? data = await HomeServices(ApiService()).checkAllHomeTaps(homeTapId);
-     return data;
-   }catch (e){
-     emit(HomeError("Failed to load data"));
-   }
-   return null;
+    try {
+      bool? data = await HomeServices(ApiService()).checkAllHomeTaps(homeTapId);
+      return data;
+    } catch (e) {
+      emit(HomeError("Failed to load data"));
+    }
+    return null;
   }
   void _createAnimations(int count) {
     fadeAnimations = List.generate(
